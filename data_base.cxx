@@ -14,7 +14,7 @@ const std::string unknown_name = "unknown table name";
 
 using namespace my;
 
-bool table::insert_row(size_t id, const std::string &name) {
+bool data_base::table::insert_row(size_t id, const std::string &name) {
   if (m_table.count(id)) {
     std::string error = "duplicate " + std::to_string(id);
     throw std::invalid_argument(error);
@@ -24,19 +24,19 @@ bool table::insert_row(size_t id, const std::string &name) {
   }
 }
 
-void table::truncate() {
+void data_base::table::truncate() {
   m_table.clear();
 }
 
-std::string table::name(size_t id) const {
+std::string data_base::table::name(size_t id) const {
   return m_table.at(id);
 }
 
-auto table::begin() const {
+auto data_base::table::begin() const {
   return m_table.begin();
 }
 
-auto table::end() const {
+auto data_base::table::end() const {
   return m_table.end();
 }
 
@@ -79,14 +79,22 @@ std::map<size_t, std::string> data_base::intersection() const {
   std::set_intersection(m_data.at(table_a).begin(), m_data.at(table_a).end(),
                         m_data.at(table_b).begin(), m_data.at(table_b).end(),
                         std::back_inserter(intersection),
-                        [](const std::pair<const size_t, std::string> &lhs,
-                           const std::pair<const size_t, std::string> &rhs) {
+                        [](const auto &lhs, const auto &rhs) {
+    return lhs.first < rhs.first;
+  });
+  std::set_intersection(m_data.at(table_b).begin(), m_data.at(table_b).end(),
+                        m_data.at(table_a).begin(), m_data.at(table_a).end(),
+                        std::back_inserter(intersection),
+                        [](const auto &lhs, const auto &rhs) {
     return lhs.first < rhs.first;
   });
 
   std::map<size_t, std::string> result;
   for (const auto &i : intersection) {
-    result[i.first].append(" ").append(i.second);
+    auto str = result.count(i.first) ?
+          " " + i.second :
+          i.second;
+    result[i.first].append(str);
   }
 
   return result;
@@ -101,14 +109,13 @@ std::map<size_t, std::string> data_base::symm_difference() const {
   std::set_symmetric_difference(m_data.at(table_a).begin(), m_data.at(table_a).end(),
                                 m_data.at(table_b).begin(), m_data.at(table_b).end(),
                                 std::back_inserter(difference),
-                                [](const std::pair<const size_t, std::string> &lhs,
-                                   const std::pair<const size_t, std::string> &rhs) {
+                                [](const auto &lhs, const auto &rhs) {
     return lhs.first < rhs.first;
   });
 
   std::map<size_t, std::string> result;
-  for (const auto &i : difference) {
-    result[i.first].append(" ").append(i.second);
+  for (const auto &d : difference) {
+    result.emplace(d);
   }
 
   return result;

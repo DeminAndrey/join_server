@@ -69,15 +69,15 @@ private:
     if (request_.empty()) {
       response.append(Response::ERR).append(Response::EMPTY);
     }
-    else if (request == protocol::INTERSECTION) {
+    else if (request == Protocol::INTERSECTION) {
       auto result = handler.intersection();
       response = lexical_cast(result);
     }
-    else if (request == protocol::SYMMETRIC_DIFFERENCE) {
+    else if (request == Protocol::SYMMETRIC_DIFFERENCE) {
       auto result = handler.symm_difference();
       response = lexical_cast(result);
     }
-    else if (request.find(protocol::TRUNCATE) != std::string::npos) {
+    else if (request.find(Protocol::TRUNCATE) != std::string::npos) {
       auto results = parse_request(request);
       if (results.empty()) {
         response.append(Response::ERR).append(Response::EMPTY);
@@ -88,7 +88,7 @@ private:
                            : Response::ERR + " " + msg;
       }
     }
-    else if (request.find(protocol::INSERT) != std::string::npos) {
+    else if (request.find(Protocol::INSERT) != std::string::npos) {
       auto results = parse_request(request);
       if (results.size() != 3) {
         response = Response::ERR;

@@ -21,6 +21,8 @@ add_executable(server
 )
 
 add_executable(client
+  data_base.h
+  data_base.cxx
   session.h
   session.cxx
   task_processor.h

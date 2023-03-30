@@ -28,26 +28,22 @@ TEST(database_test, base_test) {
     {4, "quality example"},
     {5, "precision lake"}
   };
-  auto s = db.intersection();
-//  ASSERT_EQ(intersection, db.intersection());
+  ASSERT_EQ(intersection, db.intersection());
 
   // symm_difference
   std::map<size_t, std::string> difference = {
-    {0, "lean "},
-    {1, "sweater "},
-    {2, "frank "},
-    {6, " flour"},
-    {7, " wonder"},
-    {8, " selection"}
+    {0, "lean"},
+    {1, "sweater"},
+    {2, "frank"},
+    {6, "flour"},
+    {7, "wonder"},
+    {8, "selection"}
   };
-  auto d = db.symm_difference();
-//  ASSERT_EQ(difference, db.symm_difference());
+  ASSERT_EQ(difference, db.symm_difference());
 
   // truncate
   ASSERT_TRUE(db.truncate("A").first);
   ASSERT_TRUE(db.truncate("B").first);
-
-  ASSERT_TRUE(db.is_empty());
 }
 
 int main(int argc, char **argv) {

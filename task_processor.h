@@ -126,7 +126,6 @@ private:
       return;
     }
     listener->new_c_.reset(new connection_with_data(get_ioc()));
-//    listener->new_c_->handler = async::connect(listener->bulk_size);
 
     boost::asio::ip::tcp::socket &s = listener->new_c_->socket;
     acceptor_t &a = listener->acceptor_;
