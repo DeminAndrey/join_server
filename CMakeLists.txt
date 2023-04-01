@@ -7,7 +7,9 @@ project(join_server VERSION ${PROJECT_VESRION})
 
 configure_file(version.h.in version.h)
 
-find_package(Boost)
+find_package(Boost
+  COMPONENTS
+  program_options)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -62,7 +64,9 @@ target_include_directories(client
   PRIVATE ${Boost_INCLUDE_DIR})
 
 target_link_libraries(client
-  PRIVATE Boost::boost)
+  PRIVATE Boost::boost
+  PRIVATE Boost::program_options
+  )
 
 add_executable(tests
   data_base.h
